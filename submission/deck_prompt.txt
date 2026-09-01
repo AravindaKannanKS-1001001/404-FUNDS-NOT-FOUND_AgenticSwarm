@@ -1,0 +1,73 @@
+Create a 12-slide submission deck for the "Agentic Swarm — The AI Boardroom" hackathon.
+
+AUDIENCE: hackathon judges scoring business value, agent specialisation, agent
+collaboration, decision quality, adaptability, technical implementation and presentation.
+
+STYLE: dark background, high contrast, one idea per slide. Points, not paragraphs. Short
+lines. Clean diagrams over decoration. Indian rupees written as "INR 27 crore", never with a
+currency symbol.
+
+CRITICAL EVIDENCE RULE: every number, percentage and portfolio figure on a slide must come
+from the source documents. Do NOT invent statistics, latencies, ID codes, accuracy figures
+or decorative metrics. If a slide needs a number and the sources do not supply one, leave it
+out rather than inventing it.
+
+SLIDE PLAN — follow this order:
+
+1. TITLE — "The AI Boardroom". Subtitle: "A board that convenes on any business problem".
+   Note the track: Theme A — FINSWARM (FinNova Capital, digital small-business lending).
+
+2. THE PROBLEM — FinNova has INR 30 crore, room for 700 loans, three customer segments and
+   eight hard limits. The question is not who will default (a credit model answers that) but
+   which portfolio to actually write. That question has no single owner.
+
+3. THE TRACK AND THE BOARD — the six mandated agents (Business Research, Finance and
+   Treasury, Credit Risk, Marketing and Sales, Compliance and Customer Protection, CEO).
+   For each, show what it owns and which hard constraint it can veto. Note that Intake is a
+   deterministic pre-board tool, not a judged agent.
+
+4. ARCHITECTURE — the pipeline: brief, intake, case pack, validator, deterministic search,
+   the board, decision plus audit trail. Emphasise that no Python file knows what industry
+   the problem is; the roster, variables, formulas and constraints all live in a JSON pack.
+
+5. SPECIALISATION IS STRUCTURAL — every variable carries a visible_to list, so Marketing
+   literally cannot see the segment default rates. Credit Risk sees 10 of 22 variables. The
+   same field doubles as the impact map used on a surprise.
+
+6. NUMBERS FROM A SANDBOX, NOT FROM THE MODEL — agents state lever preferences and 0-1
+   signals; a whitelisted Python AST evaluator computes every figure. No attribute access,
+   no imports, no builtins, unknown names rejected before compilation.
+
+7. TC1 RESULT — THE GREEDY ANSWER IS ILLEGAL — 450 manufacturers plus 250 SMEs is the
+   profit-maximising mix and is arithmetically infeasible: it asks to lend INR 55.5 crore
+   against INR 30 crore and puts manufacturers at about 73 percent of the book against a
+   70 percent cap. Finance blocked it on liquidity, Credit Risk on concentration.
+
+8. TC1 RESULT — THE FEASIBLE OPTIMUM AND THE ARGUMENT IT STARTED — the chosen portfolio
+   G1 (0 retail, 306 SME, 96 manufacturer loans at 19 percent) serves zero retail shops.
+   Marketing backed a retail-inclusive alternative instead and filed a material objection;
+   Compliance counter-objected that higher retail exposure raises conduct risk. Show this as
+   a real disagreement between departments.
+
+9. TC1 CEO DECISION — the one-sentence decision plus the eight mandated sections that are
+   validated in code (customer segment, product terms, approval policy, budget allocation,
+   risk limits, go-to-market, implementation sequence, measurable outcomes), the rejected
+   alternatives with the constraint each broke, and the three KPIs.
+
+10. TC2 SURPRISE — SELECTIVE RE-RUN — defaults jump to 8 / 5 / 7 percent and the committee
+    tightens the portfolio cap to 5.5 percent. Compliance, Credit Risk and Finance re-ran;
+    Research and Marketing did not, because the changed variables are not visible to them.
+    List the four invalidated assumptions.
+
+11. TC2 FINDING — THE PILOT IS INFEASIBLE AS DESIGNED — zero feasible portfolios. The 70
+    percent concentration cap forces at least 30 percent of the book into a segment
+    defaulting at 7 percent or worse, which breaches the 5.5 percent cap; an all-SME book
+    clears the default cap but breaches concentration. The two rules are jointly
+    unsatisfiable. That is the answer TC2 asks for: continue, redesign or pause.
+
+12. HOW IT IS BUILT AND WHAT WE CLAIM — Python 3.11, Pydantic, stdlib ast sandbox, stdlib
+    random search with local refinement, ThreadPoolExecutor, Gemini 3 Flash, Streamlit. No
+    agent framework and no solver, deliberately. Five-rung fallback ladder that never
+    raises. Closing honest line: portfolio optimisation under constraints is textbook; the
+    contribution is the decision layer on top — constraint ownership, cross-functional
+    objection, and selective re-planning, with a full audit trail.

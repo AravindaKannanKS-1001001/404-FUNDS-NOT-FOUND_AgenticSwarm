@@ -1,0 +1,7 @@
+{
+  "_comment": "TC2 credit-risk spike, verbatim from the test-case PDF. Retail 5->8%, SME 3.5->5%, mfg 4.5->7%; risk committee tightens the portfolio default cap to 5.5%. Limits are pack variables, so no constraint surgery is needed.",
+  "retail_default": 0.08,
+  "sme_default": 0.05,
+  "mfg_default": 0.07,
+  "default_limit": 0.055
+}

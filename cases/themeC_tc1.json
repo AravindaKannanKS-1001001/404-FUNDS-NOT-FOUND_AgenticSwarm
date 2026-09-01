@@ -1,0 +1,104 @@
+{
+  "case_id": "themeC_tc1",
+  "company": "IndusCompute Hub",
+  "theme": "CHIPSWARM",
+  "problem": "IndusCompute Hub, a fictional Indian GPU module assembly, advanced packaging and testing facility (it does not fabricate wafers), has 24,000 final-assembly and testing machine-hours available next month. It builds three product lines - AI accelerator modules, gaming GPU boards and edge GPU modules - each with a machine-hour cost, a contribution margin, a maximum demand and a minimum committed volume. It must decide how many units of each to build.",
+  "decision_question": "How many units of each product should the hub manufacture? Explain the contribution margin, customer, strategic and resilience trade-offs.",
+  "roster": [
+    { "id": "research", "title": "Market Research Agent",
+      "mandate": "Analyse demand, customer segments, competitive position and strategic account value across the product lines.",
+      "signals": ["demand_confidence"] },
+    { "id": "finance", "title": "Finance Agent",
+      "mandate": "Evaluate contribution margin, product-mix profitability and financial effect.",
+      "signals": ["margin_health"] },
+    { "id": "manufacturing", "title": "Manufacturing Agent",
+      "mandate": "Own final-assembly and test capacity, the machine-hour budget, line balancing and the disruption buffer.",
+      "signals": ["capacity_health"] },
+    { "id": "supply_chain", "title": "Supply Chain Agent",
+      "mandate": "Component availability, procurement lead time and delivery risk for each line.",
+      "signals": ["supply_health"] },
+    { "id": "quality", "title": "Quality and Reliability Agent",
+      "mandate": "Yield, test escape rate, field-failure and reputational risk.",
+      "signals": ["yield_health", "delivery_risk"] },
+    { "id": "marketing", "title": "Marketing and Sales Agent",
+      "mandate": "Customer commitments, minimum volumes, positioning and account relationships.",
+      "signals": ["customer_impact"] }
+  ],
+  "ceo": {
+    "title": "CEO Agent",
+    "objective": "Balance contribution margin, customer commitments, bottleneck capacity, component availability, yield, quality, energy consumption, delivery risk and strategic customer value. A high-margin mix that breaks a customer commitment or the capacity buffer is not automatically the right mix."
+  },
+  "guardrails": [
+    "Do not invent semiconductor specifications. Treat all product and process values as synthetic planning data.",
+    "Do not claim a real process node, foundry relationship or benchmark result."
+  ],
+  "required_decision_fields": [
+    "production_mix",
+    "capacity_calculation",
+    "procurement_and_inventory_actions",
+    "quality_controls",
+    "customer_communication",
+    "financial_effect",
+    "implementation_sequence"
+  ],
+  "variables": [
+    { "key": "machine_hours", "value": 24000, "unit": "hours", "source": "case_pack", "visible_to": ["manufacturing", "finance"], "note": "final-assembly and testing hours next month" },
+    { "key": "buffer_hours", "value": 1200, "unit": "hours", "source": "case_pack", "visible_to": ["manufacturing", "supply_chain"], "note": "disruption buffer that should stay unused unless the CEO justifies otherwise" },
+    { "key": "line_cap_frac", "value": 0.65, "unit": "fraction", "source": "case_pack", "visible_to": ["manufacturing"], "note": "no single line may consume more than this share of total machine-hours" },
+
+    { "key": "ai_hpu", "value": 6, "unit": "hours/unit", "source": "case_pack", "visible_to": ["manufacturing", "finance"], "note": "" },
+    { "key": "gaming_hpu", "value": 2, "unit": "hours/unit", "source": "case_pack", "visible_to": ["manufacturing", "finance"], "note": "" },
+    { "key": "edge_hpu", "value": 3, "unit": "hours/unit", "source": "case_pack", "visible_to": ["manufacturing", "finance"], "note": "" },
+
+    { "key": "ai_margin", "value": 45000, "unit": "INR/unit", "source": "case_pack", "visible_to": ["finance", "marketing"], "note": "" },
+    { "key": "gaming_margin", "value": 10000, "unit": "INR/unit", "source": "case_pack", "visible_to": ["finance", "marketing"], "note": "" },
+    { "key": "edge_margin", "value": 18000, "unit": "INR/unit", "source": "case_pack", "visible_to": ["finance", "marketing"], "note": "" },
+
+    { "key": "ai_max", "value": 2500, "unit": "units", "source": "case_pack", "visible_to": ["research", "marketing"], "note": "rapidly growing data-centre demand" },
+    { "key": "gaming_max", "value": 6000, "unit": "units", "source": "case_pack", "visible_to": ["research", "marketing"], "note": "stable repeat customers" },
+    { "key": "edge_max", "value": 3500, "unit": "units", "source": "case_pack", "visible_to": ["research", "marketing"], "note": "two long-term industrial customers" },
+
+    { "key": "ai_min", "value": 800, "unit": "units", "source": "case_pack", "visible_to": ["marketing", "manufacturing"], "note": "minimum committed AI accelerator volume" },
+    { "key": "gaming_min", "value": 2000, "unit": "units", "source": "case_pack", "visible_to": ["marketing", "manufacturing"], "note": "minimum committed gaming volume" },
+    { "key": "edge_min", "value": 1000, "unit": "units", "source": "case_pack", "visible_to": ["marketing", "manufacturing"], "note": "minimum committed edge volume" }
+  ],
+  "levers": [
+    { "key": "n_ai", "min": 0, "max": 2500, "step": 1, "owner": "manufacturing" },
+    { "key": "n_gaming", "min": 0, "max": 6000, "step": 1, "owner": "manufacturing" },
+    { "key": "n_edge", "min": 0, "max": 3500, "step": 1, "owner": "manufacturing" }
+  ],
+  "metrics": {
+    "ai_hours": "n_ai * ai_hpu",
+    "gaming_hours": "n_gaming * gaming_hpu",
+    "edge_hours": "n_edge * edge_hpu",
+    "total_hours": "ai_hours + gaming_hours + edge_hours",
+    "contribution_margin": "n_ai*ai_margin + n_gaming*gaming_margin + n_edge*edge_margin",
+    "max_line_hours": "max(ai_hours, gaming_hours, edge_hours)",
+    "free_buffer": "machine_hours - total_hours"
+  },
+  "constraints": [
+    { "id": "capacity", "expr": "total_hours <= machine_hours - buffer_hours", "label": "Total machine-hours used must leave the 1,200-hour disruption buffer", "owner": "manufacturing" },
+    { "id": "line_cap", "expr": "max_line_hours <= machine_hours * line_cap_frac", "label": "No product line may use more than 65% of total machine-hours", "owner": "manufacturing" },
+    { "id": "ai_demand", "expr": "n_ai <= ai_max", "label": "AI accelerator production cannot exceed maximum demand", "owner": "research" },
+    { "id": "gaming_demand", "expr": "n_gaming <= gaming_max", "label": "Gaming board production cannot exceed maximum demand", "owner": "research" },
+    { "id": "edge_demand", "expr": "n_edge <= edge_max", "label": "Edge module production cannot exceed maximum demand", "owner": "research" },
+    { "id": "ai_commit", "expr": "n_ai >= ai_min", "label": "Must build at least the committed AI accelerator volume", "owner": "marketing" },
+    { "id": "gaming_commit", "expr": "n_gaming >= gaming_min", "label": "Must build at least the committed gaming volume", "owner": "marketing" },
+    { "id": "edge_commit", "expr": "n_edge >= edge_min", "label": "Must build at least the committed edge volume", "owner": "marketing" }
+  ],
+  "direction": { "contribution_margin": "max", "total_hours": "max", "free_buffer": "min" },
+  "objective": "contribution_margin",
+  "score_inputs": {
+    "value": "metric:contribution_margin",
+    "efficiency": "signal:yield_health",
+    "feasibility": "signal:capacity_health",
+    "customer": "signal:customer_impact",
+    "risk": "signal:delivery_risk"
+  },
+  "weights": { "value": 0.35, "efficiency": 0.15, "feasibility": 0.2, "customer": 0.15, "risk": 0.15 },
+  "seed_strategies": [
+    { "id": "S_maxall", "name": "Fill every line to maximum demand", "levers": { "n_ai": 2500, "n_gaming": 6000, "n_edge": 3500 } },
+    { "id": "S_gaming", "name": "Gaming-led safe mix", "levers": { "n_ai": 800, "n_gaming": 6000, "n_edge": 1000 } },
+    { "id": "S_minimums", "name": "Committed minimums only", "levers": { "n_ai": 800, "n_gaming": 2000, "n_edge": 1000 } }
+  ]
+}

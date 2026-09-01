@@ -1,0 +1,1725 @@
+{
+  "run_id": "a3ab9132",
+  "case_id": "themeA_tc1",
+  "pack": {
+    "case_id": "themeA_tc1",
+    "company": "FinNova Capital",
+    "theme": "FINSWARM",
+    "problem": "FinNova Capital, a fictional Indian digital lender to registered small businesses, has INR 30 crore for a one-year small-business lending pilot and INR 60 lakh for customer acquisition, of which INR 18 lakh is product setup. It can approve at most 700 loans across three segments - retail shops, service SMEs and small manufacturers - and must choose one primary segment or a justified portfolio mix, together with pricing and an approval policy. Cost of funds is 10% per year and servicing is 1.5% of principal per year.",
+    "decision_question": "Which segment mix, pricing, approval policy and launch plan creates the strongest risk-adjusted business outcome?",
+    "roster": [
+      {
+        "id": "research",
+        "title": "Business Research Agent",
+        "mandate": "Analyse market size, customer demand, competitors, segment opportunity and volume feasibility.",
+        "signals": [
+          "demand_confidence"
+        ]
+      },
+      {
+        "id": "finance",
+        "title": "Finance and Treasury Agent",
+        "mandate": "Evaluate cost of funds, servicing cost, deployable capital, liquidity and net profitability.",
+        "signals": [
+          "margin_health",
+          "liquidity_health"
+        ]
+      },
+      {
+        "id": "credit_risk",
+        "title": "Credit Risk Agent",
+        "mandate": "Assess expected credit losses, portfolio default, segment concentration and portfolio quality.",
+        "signals": [
+          "risk_score"
+        ]
+      },
+      {
+        "id": "marketing",
+        "title": "Marketing and Sales Agent",
+        "mandate": "Target customer segments, positioning, acquisition channels and acquisition budget.",
+        "signals": [
+          "customer_impact",
+          "growth_potential"
+        ]
+      },
+      {
+        "id": "compliance",
+        "title": "Compliance and Customer Protection Agent",
+        "mandate": "Fair customer treatment, affordability, conduct risk and regulatory exposure.",
+        "signals": [
+          "compliance_health"
+        ]
+      }
+    ],
+    "ceo": {
+      "title": "CEO Agent",
+      "objective": "Balance sustainable growth, affordability, expected credit losses, liquidity, operational capacity, fair customer treatment and compliance. Do not approve a strategy solely because it maximizes short-term revenue."
+    },
+    "guardrails": [
+      "This is a synthetic corporate strategy exercise, not personal financial advice.",
+      "Do not infer protected characteristics or recommend discriminatory lending. Segment only on business type, loan size and observed default history."
+    ],
+    "required_decision_fields": [
+      "customer_segment",
+      "product_terms",
+      "approval_policy",
+      "budget_allocation",
+      "risk_limits",
+      "go_to_market",
+      "implementation_sequence",
+      "measurable_outcomes"
+    ],
+    "variables": [
+      {
+        "key": "capital",
+        "value": 300000000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "finance",
+          "credit_risk"
+        ],
+        "note": ""
+      },
+      {
+        "key": "cost_of_funds",
+        "value": 0.1,
+        "unit": "fraction/yr",
+        "source": "case_pack",
+        "visible_to": [
+          "finance"
+        ],
+        "note": ""
+      },
+      {
+        "key": "servicing_rate",
+        "value": 0.015,
+        "unit": "fraction of principal/yr",
+        "source": "case_pack",
+        "visible_to": [
+          "finance"
+        ],
+        "note": ""
+      },
+      {
+        "key": "setup_cost",
+        "value": 1800000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "finance",
+          "marketing"
+        ],
+        "note": "product setup, deducted from the acquisition budget"
+      },
+      {
+        "key": "acq_budget",
+        "value": 4200000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "marketing",
+          "finance"
+        ],
+        "note": "INR 60 lakh acquisition budget minus INR 18 lakh setup"
+      },
+      {
+        "key": "liquidity_reserve",
+        "value": 30000000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "finance",
+          "credit_risk"
+        ],
+        "note": "INR 3 crore must remain undeployed"
+      },
+      {
+        "key": "max_loans",
+        "value": 700,
+        "unit": "loans",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "finance"
+        ],
+        "note": ""
+      },
+      {
+        "key": "retail_loan",
+        "value": 400000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "finance",
+          "credit_risk",
+          "compliance"
+        ],
+        "note": "average retail-shop loan"
+      },
+      {
+        "key": "sme_loan",
+        "value": 600000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "finance",
+          "credit_risk",
+          "compliance"
+        ],
+        "note": "average service-SME loan"
+      },
+      {
+        "key": "mfg_loan",
+        "value": 900000,
+        "unit": "INR",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "finance",
+          "credit_risk",
+          "compliance"
+        ],
+        "note": "average small-manufacturer loan"
+      },
+      {
+        "key": "retail_default",
+        "value": 0.05,
+        "unit": "fraction",
+        "source": "case_pack",
+        "visible_to": [
+          "credit_risk",
+          "compliance",
+          "finance"
+        ],
+        "note": "expected default, retail shops"
+      },
+      {
+        "key": "sme_default",
+        "value": 0.035,
+        "unit": "fraction",
+        "source": "case_pack",
+        "visible_to": [
+          "credit_risk",
+          "compliance",
+          "finance"
+        ],
+        "note": "expected default, service SMEs"
+      },
+      {
+        "key": "mfg_default",
+        "value": 0.045,
+        "unit": "fraction",
+        "source": "case_pack",
+        "visible_to": [
+          "credit_risk",
+          "compliance",
+          "finance"
+        ],
+        "note": "expected default, small manufacturers"
+      },
+      {
+        "key": "retail_demand",
+        "value": 1500,
+        "unit": "loans",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "marketing"
+        ],
+        "note": "available retail demand"
+      },
+      {
+        "key": "sme_demand",
+        "value": 900,
+        "unit": "loans",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "marketing"
+        ],
+        "note": "available SME demand"
+      },
+      {
+        "key": "mfg_demand",
+        "value": 450,
+        "unit": "loans",
+        "source": "case_pack",
+        "visible_to": [
+          "research",
+          "marketing"
+        ],
+        "note": "available manufacturer demand"
+      },
+      {
+        "key": "retail_acq",
+        "value": 2000,
+        "unit": "INR/customer",
+        "source": "case_pack",
+        "visible_to": [
+          "marketing"
+        ],
+        "note": ""
+      },
+      {
+        "key": "sme_acq",
+        "value": 3500,
+        "unit": "INR/customer",
+        "source": "case_pack",
+        "visible_to": [
+          "marketing"
+        ],
+        "note": ""
+      },
+      {
+        "key": "mfg_acq",
+        "value": 5500,
+        "unit": "INR/customer",
+        "source": "case_pack",
+        "visible_to": [
+          "marketing"
+        ],
+        "note": ""
+      },
+      {
+        "key": "default_limit",
+        "value": 0.05,
+        "unit": "fraction",
+        "source": "case_pack",
+        "visible_to": [
+          "credit_risk",
+          "compliance"
+        ],
+        "note": "expected portfolio default must stay at or below this"
+      },
+      {
+        "key": "rate_limit",
+        "value": 0.19,
+        "unit": "fraction",
+        "source": "case_pack",
+        "visible_to": [
+          "compliance",
+          "finance"
+        ],
+        "note": "average annual customer interest ceiling"
+      },
+      {
+        "key": "concentration_limit",
+        "value": 0.7,
+        "unit": "fraction",
+        "source": "case_pack",
+        "visible_to": [
+          "credit_risk"
+        ],
+        "note": "no segment above this share of deployed capital"
+      }
+    ],
+    "levers": [
+      {
+        "key": "n_retail",
+        "min": 0,
+        "max": 1500,
+        "step": 1,
+        "owner": "marketing"
+      },
+      {
+        "key": "n_sme",
+        "min": 0,
+        "max": 900,
+        "step": 1,
+        "owner": "marketing"
+      },
+      {
+        "key": "n_mfg",
+        "min": 0,
+        "max": 450,
+        "step": 1,
+        "owner": "marketing"
+      },
+      {
+        "key": "rate",
+        "min": 0.12,
+        "max": 0.19,
+        "step": 0.005,
+        "owner": "finance"
+      }
+    ],
+    "metrics": {
+      "deployed": "n_retail*retail_loan + n_sme*sme_loan + n_mfg*mfg_loan",
+      "credit_loss": "n_retail*retail_loan*retail_default + n_sme*sme_loan*sme_default + n_mfg*mfg_loan*mfg_default",
+      "interest_income": "deployed * rate",
+      "funding_cost": "deployed * cost_of_funds",
+      "servicing_cost": "deployed * servicing_rate",
+      "acquisition_spend": "n_retail*retail_acq + n_sme*sme_acq + n_mfg*mfg_acq",
+      "net_income": "interest_income - credit_loss - funding_cost - servicing_cost - acquisition_spend - setup_cost",
+      "portfolio_default_pct": "credit_loss / max(deployed, 1)",
+      "undeployed_capital": "capital - deployed",
+      "max_segment_share": "max(n_retail*retail_loan, n_sme*sme_loan, n_mfg*mfg_loan) / max(deployed, 1)",
+      "total_loans": "n_retail + n_sme + n_mfg"
+    },
+    "constraints": [
+      {
+        "id": "default_cap",
+        "expr": "portfolio_default_pct <= default_limit",
+        "label": "Expected portfolio default must remain at or below 5%",
+        "owner": "credit_risk"
+      },
+      {
+        "id": "rate_cap",
+        "expr": "rate <= rate_limit",
+        "label": "Average annual customer interest must not exceed 19%",
+        "owner": "compliance"
+      },
+      {
+        "id": "concentration",
+        "expr": "max_segment_share <= concentration_limit",
+        "label": "No segment may receive more than 70% of deployed capital",
+        "owner": "credit_risk"
+      },
+      {
+        "id": "liquidity",
+        "expr": "undeployed_capital >= liquidity_reserve",
+        "label": "At least INR 3 crore must remain undeployed as a liquidity reserve",
+        "owner": "finance"
+      },
+      {
+        "id": "loan_cap",
+        "expr": "total_loans <= max_loans",
+        "label": "Total approved loans cannot exceed 700",
+        "owner": "research"
+      },
+      {
+        "id": "acq_cap",
+        "expr": "acquisition_spend <= acq_budget",
+        "label": "Acquisition spend within the budget remaining after setup cost",
+        "owner": "marketing"
+      },
+      {
+        "id": "demand_retail",
+        "expr": "n_retail <= retail_demand",
+        "label": "Cannot lend to more retail shops than the available demand",
+        "owner": "research"
+      },
+      {
+        "id": "demand_sme",
+        "expr": "n_sme <= sme_demand",
+        "label": "Cannot lend to more service SMEs than the available demand",
+        "owner": "research"
+      },
+      {
+        "id": "demand_mfg",
+        "expr": "n_mfg <= mfg_demand",
+        "label": "Cannot lend to more small manufacturers than the available demand",
+        "owner": "research"
+      }
+    ],
+    "direction": {
+      "net_income": "max",
+      "portfolio_default_pct": "min",
+      "deployed": "max"
+    },
+    "objective": "net_income",
+    "score_inputs": {
+      "value": "metric:net_income",
+      "efficiency": "metric:portfolio_default_pct",
+      "feasibility": "signal:liquidity_health",
+      "customer": "signal:customer_impact",
+      "risk": "signal:risk_score"
+    },
+    "weights": {
+      "value": 0.3,
+      "efficiency": 0.25,
+      "feasibility": 0.2,
+      "customer": 0.15,
+      "risk": 0.1
+    },
+    "seed_strategies": [
+      {
+        "id": "S_retail",
+        "name": "Retail-led volume play",
+        "levers": {
+          "n_retail": 700,
+          "n_sme": 0,
+          "n_mfg": 0,
+          "rate": 0.19
+        }
+      },
+      {
+        "id": "S_greedy",
+        "name": "Greedy high-margin (450 mfg + 250 SME)",
+        "levers": {
+          "n_retail": 0,
+          "n_sme": 250,
+          "n_mfg": 450,
+          "rate": 0.19
+        }
+      },
+      {
+        "id": "S_balanced",
+        "name": "Diversified three-segment book",
+        "levers": {
+          "n_retail": 150,
+          "n_sme": 200,
+          "n_mfg": 100,
+          "rate": 0.19
+        }
+      }
+    ]
+  },
+  "variables": [
+    {
+      "key": "capital",
+      "value": 300000000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "finance",
+        "credit_risk"
+      ],
+      "note": ""
+    },
+    {
+      "key": "cost_of_funds",
+      "value": 0.1,
+      "unit": "fraction/yr",
+      "source": "case_pack",
+      "visible_to": [
+        "finance"
+      ],
+      "note": ""
+    },
+    {
+      "key": "servicing_rate",
+      "value": 0.015,
+      "unit": "fraction of principal/yr",
+      "source": "case_pack",
+      "visible_to": [
+        "finance"
+      ],
+      "note": ""
+    },
+    {
+      "key": "setup_cost",
+      "value": 1800000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "finance",
+        "marketing"
+      ],
+      "note": "product setup, deducted from the acquisition budget"
+    },
+    {
+      "key": "acq_budget",
+      "value": 4200000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "marketing",
+        "finance"
+      ],
+      "note": "INR 60 lakh acquisition budget minus INR 18 lakh setup"
+    },
+    {
+      "key": "liquidity_reserve",
+      "value": 30000000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "finance",
+        "credit_risk"
+      ],
+      "note": "INR 3 crore must remain undeployed"
+    },
+    {
+      "key": "max_loans",
+      "value": 700.0,
+      "unit": "loans",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "finance"
+      ],
+      "note": ""
+    },
+    {
+      "key": "retail_loan",
+      "value": 400000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "finance",
+        "credit_risk",
+        "compliance"
+      ],
+      "note": "average retail-shop loan"
+    },
+    {
+      "key": "sme_loan",
+      "value": 600000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "finance",
+        "credit_risk",
+        "compliance"
+      ],
+      "note": "average service-SME loan"
+    },
+    {
+      "key": "mfg_loan",
+      "value": 900000.0,
+      "unit": "INR",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "finance",
+        "credit_risk",
+        "compliance"
+      ],
+      "note": "average small-manufacturer loan"
+    },
+    {
+      "key": "retail_default",
+      "value": 0.05,
+      "unit": "fraction",
+      "source": "case_pack",
+      "visible_to": [
+        "credit_risk",
+        "compliance",
+        "finance"
+      ],
+      "note": "expected default, retail shops"
+    },
+    {
+      "key": "sme_default",
+      "value": 0.035,
+      "unit": "fraction",
+      "source": "case_pack",
+      "visible_to": [
+        "credit_risk",
+        "compliance",
+        "finance"
+      ],
+      "note": "expected default, service SMEs"
+    },
+    {
+      "key": "mfg_default",
+      "value": 0.045,
+      "unit": "fraction",
+      "source": "case_pack",
+      "visible_to": [
+        "credit_risk",
+        "compliance",
+        "finance"
+      ],
+      "note": "expected default, small manufacturers"
+    },
+    {
+      "key": "retail_demand",
+      "value": 1500.0,
+      "unit": "loans",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "marketing"
+      ],
+      "note": "available retail demand"
+    },
+    {
+      "key": "sme_demand",
+      "value": 900.0,
+      "unit": "loans",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "marketing"
+      ],
+      "note": "available SME demand"
+    },
+    {
+      "key": "mfg_demand",
+      "value": 450.0,
+      "unit": "loans",
+      "source": "case_pack",
+      "visible_to": [
+        "research",
+        "marketing"
+      ],
+      "note": "available manufacturer demand"
+    },
+    {
+      "key": "retail_acq",
+      "value": 2000.0,
+      "unit": "INR/customer",
+      "source": "case_pack",
+      "visible_to": [
+        "marketing"
+      ],
+      "note": ""
+    },
+    {
+      "key": "sme_acq",
+      "value": 3500.0,
+      "unit": "INR/customer",
+      "source": "case_pack",
+      "visible_to": [
+        "marketing"
+      ],
+      "note": ""
+    },
+    {
+      "key": "mfg_acq",
+      "value": 5500.0,
+      "unit": "INR/customer",
+      "source": "case_pack",
+      "visible_to": [
+        "marketing"
+      ],
+      "note": ""
+    },
+    {
+      "key": "default_limit",
+      "value": 0.05,
+      "unit": "fraction",
+      "source": "case_pack",
+      "visible_to": [
+        "credit_risk",
+        "compliance"
+      ],
+      "note": "expected portfolio default must stay at or below this"
+    },
+    {
+      "key": "rate_limit",
+      "value": 0.19,
+      "unit": "fraction",
+      "source": "case_pack",
+      "visible_to": [
+        "compliance",
+        "finance"
+      ],
+      "note": "average annual customer interest ceiling"
+    },
+    {
+      "key": "concentration_limit",
+      "value": 0.7,
+      "unit": "fraction",
+      "source": "case_pack",
+      "visible_to": [
+        "credit_risk"
+      ],
+      "note": "no segment above this share of deployed capital"
+    }
+  ],
+  "strategies": [
+    {
+      "id": "G1",
+      "name": "Search optimum 1",
+      "levers": {
+        "n_retail": 0.0,
+        "n_sme": 306.0,
+        "n_mfg": 96.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 270000000.0,
+        "credit_loss": 10314000.0,
+        "interest_income": 51300000.0,
+        "funding_cost": 27000000.0,
+        "servicing_cost": 4050000.0,
+        "acquisition_spend": 1599000.0,
+        "net_income": 6537000.0,
+        "portfolio_default_pct": 0.0382,
+        "undeployed_capital": 30000000.0,
+        "max_segment_share": 0.68,
+        "total_loans": 402.0
+      },
+      "violations": [],
+      "score": 0.9425,
+      "verdict": "selected",
+      "reject_reason": "",
+      "origin": "search"
+    },
+    {
+      "id": "G2",
+      "name": "Search optimum 2",
+      "levers": {
+        "n_retail": 78.0,
+        "n_sme": 314.0,
+        "n_mfg": 56.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 270000000.0,
+        "credit_loss": 10422000.0,
+        "interest_income": 51300000.0,
+        "funding_cost": 27000000.0,
+        "servicing_cost": 4050000.0,
+        "acquisition_spend": 1563000.0,
+        "net_income": 6465000.0,
+        "portfolio_default_pct": 0.0386,
+        "undeployed_capital": 30000000.0,
+        "max_segment_share": 0.6977777777777778,
+        "total_loans": 448.0
+      },
+      "violations": [],
+      "score": 0.8893020986904862,
+      "verdict": "viable",
+      "reject_reason": "",
+      "origin": "search"
+    },
+    {
+      "id": "G3",
+      "name": "Search optimum 3",
+      "levers": {
+        "n_retail": 183.0,
+        "n_sme": 313.0,
+        "n_mfg": 10.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 270000000.0,
+        "credit_loss": 10638000.0,
+        "interest_income": 51300000.0,
+        "funding_cost": 27000000.0,
+        "servicing_cost": 4050000.0,
+        "acquisition_spend": 1516500.0,
+        "net_income": 6295500.0,
+        "portfolio_default_pct": 0.0394,
+        "undeployed_capital": 30000000.0,
+        "max_segment_share": 0.6955555555555556,
+        "total_loans": 506.0
+      },
+      "violations": [],
+      "score": 0.7742817188448531,
+      "verdict": "viable",
+      "reject_reason": "",
+      "origin": "search"
+    },
+    {
+      "id": "G4",
+      "name": "Search optimum 4",
+      "levers": {
+        "n_retail": 54.0,
+        "n_sme": 258.0,
+        "n_mfg": 104.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 270000000.0,
+        "credit_loss": 10710000.0,
+        "interest_income": 51300000.0,
+        "funding_cost": 27000000.0,
+        "servicing_cost": 4050000.0,
+        "acquisition_spend": 1583000.0,
+        "net_income": 6157000.0,
+        "portfolio_default_pct": 0.03966666666666667,
+        "undeployed_capital": 30000000.0,
+        "max_segment_share": 0.5733333333333334,
+        "total_loans": 416.0
+      },
+      "violations": [],
+      "score": 0.7082076576185931,
+      "verdict": "viable",
+      "reject_reason": "",
+      "origin": "search"
+    },
+    {
+      "id": "G5",
+      "name": "Search optimum 5",
+      "levers": {
+        "n_retail": 156.0,
+        "n_sme": 217.0,
+        "n_mfg": 86.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 270000000.0,
+        "credit_loss": 11160000.0,
+        "interest_income": 51300000.0,
+        "funding_cost": 27000000.0,
+        "servicing_cost": 4050000.0,
+        "acquisition_spend": 1544500.0,
+        "net_income": 5745500.0,
+        "portfolio_default_pct": 0.04133333333333333,
+        "undeployed_capital": 30000000.0,
+        "max_segment_share": 0.4822222222222222,
+        "total_loans": 459.0
+      },
+      "violations": [],
+      "score": 0.4488383487988898,
+      "verdict": "viable",
+      "reject_reason": "",
+      "origin": "search"
+    },
+    {
+      "id": "S_balanced",
+      "name": "Diversified three-segment book",
+      "levers": {
+        "n_retail": 150.0,
+        "n_sme": 200.0,
+        "n_mfg": 100.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 270000000.0,
+        "credit_loss": 11250000.0,
+        "interest_income": 51300000.0,
+        "funding_cost": 27000000.0,
+        "servicing_cost": 4050000.0,
+        "acquisition_spend": 1550000.0,
+        "net_income": 5650000.0,
+        "portfolio_default_pct": 0.041666666666666664,
+        "undeployed_capital": 30000000.0,
+        "max_segment_share": 0.4444444444444444,
+        "total_loans": 450.0
+      },
+      "violations": [],
+      "score": 0.3925,
+      "verdict": "viable",
+      "reject_reason": "",
+      "origin": "seed"
+    },
+    {
+      "id": "S_greedy",
+      "name": "Greedy high-margin (450 mfg + 250 SME)",
+      "levers": {
+        "n_retail": 0.0,
+        "n_sme": 250.0,
+        "n_mfg": 450.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 555000000.0,
+        "credit_loss": 23475000.0,
+        "interest_income": 105450000.0,
+        "funding_cost": 55500000.0,
+        "servicing_cost": 8325000.0,
+        "acquisition_spend": 3350000.0,
+        "net_income": 13000000.0,
+        "portfolio_default_pct": 0.042297297297297295,
+        "undeployed_capital": -255000000.0,
+        "max_segment_share": 0.7297297297297297,
+        "total_loans": 700.0
+      },
+      "violations": [
+        {
+          "constraint_id": "concentration",
+          "label": "No segment may receive more than 70% of deployed capital",
+          "owner": "credit_risk",
+          "margin": 0.02972972972972976
+        },
+        {
+          "constraint_id": "liquidity",
+          "label": "At least INR 3 crore must remain undeployed as a liquidity reserve",
+          "owner": "finance",
+          "margin": 285000000.0
+        }
+      ],
+      "score": 0.0,
+      "verdict": "rejected",
+      "reject_reason": "infeasible: concentration, liquidity",
+      "origin": "seed"
+    },
+    {
+      "id": "S_retail",
+      "name": "Retail-led volume play",
+      "levers": {
+        "n_retail": 700.0,
+        "n_sme": 0.0,
+        "n_mfg": 0.0,
+        "rate": 0.19
+      },
+      "metrics": {
+        "deployed": 280000000.0,
+        "credit_loss": 14000000.0,
+        "interest_income": 53200000.0,
+        "funding_cost": 28000000.0,
+        "servicing_cost": 4200000.0,
+        "acquisition_spend": 1400000.0,
+        "net_income": 3800000.0,
+        "portfolio_default_pct": 0.05,
+        "undeployed_capital": 20000000.0,
+        "max_segment_share": 1.0,
+        "total_loans": 700.0
+      },
+      "violations": [
+        {
+          "constraint_id": "concentration",
+          "label": "No segment may receive more than 70% of deployed capital",
+          "owner": "credit_risk",
+          "margin": 0.30000000000000004
+        },
+        {
+          "constraint_id": "liquidity",
+          "label": "At least INR 3 crore must remain undeployed as a liquidity reserve",
+          "owner": "finance",
+          "margin": 10000000.0
+        }
+      ],
+      "score": 0.0,
+      "verdict": "rejected",
+      "reject_reason": "infeasible: concentration, liquidity",
+      "origin": "seed"
+    }
+  ],
+  "recommendations": [
+    {
+      "agent": "research",
+      "backs": "G1",
+      "claim": "Focus the lending pilot exclusively on the Service SME and Small Manufacturer segments to maximize risk-adjusted returns within capital constraints.",
+      "rationale": "Strategy G1 yields the lowest credit loss of 10,314,000 INR among all feasible options while achieving the target interest income of 51,300,000 INR. From a market feasibility perspective, the available demand for service SMEs (900 loans) and manufacturers (450 loans) comfortably accommodates the proposed volumes of 306 and 96 loans respectively, without requiring entry into the retail shop segment which exhibits higher credit loss at equivalent deployment levels.",
+      "lever_view": {
+        "target_retail_count": 0.0,
+        "target_sme_count": 306.0,
+        "target_mfg_count": 96.0
+      },
+      "signals": {
+        "sme_demand_utilization": 0.34,
+        "mfg_demand_utilization": 0.21,
+        "retail_demand_utilization": 0.0,
+        "total_loan_cap_utilization": 0.57
+      },
+      "assumptions": [
+        "Market demand figures (1500 retail, 900 SME, 450 mfg) remain stable throughout the one-year pilot period.",
+        "Observed default history suggests manufacturers and service SMEs have higher credit quality than the retail segment.",
+        "The cost of servicing is consistent across all loan types and is successfully covered by the interest margin.",
+        "Customer acquisition costs are within the 60 lakh budget regardless of the specific segment mix chosen from the feasible candidates."
+      ],
+      "confidence": 0.9
+    },
+    {
+      "agent": "finance",
+      "backs": "G1",
+      "claim": "Prioritize Strategy G1 to maximize net profitability while strictly adhering to the INR 30,000,000 liquidity reserve requirement.",
+      "rationale": "Strategy G1 is the most efficient allocation from a treasury perspective. It deploys the maximum allowable capital of 270,000,000 INR, which keeps the required 30,000,000 INR liquidity reserve intact. Among all feasible strategies with 270,000,000 INR deployment, G1 yields the lowest credit loss of 10,314,000 INR and maximizes the spread between the 51,300,000 INR interest income and the 27,000,000 INR funding cost, even after accounting for the 1.5% servicing rate.",
+      "lever_view": {
+        "capital_deployment_limit": 270000000.0,
+        "target_interest_rate": 0.19,
+        "liquidity_reserve_floor": 30000000.0
+      },
+      "signals": {
+        "margin_health": 0.96,
+        "liquidity_health": 1.0,
+        "capital_efficiency": 0.9
+      },
+      "assumptions": [
+        "Servicing costs are applied as 1.5% of the total principal deployed per annum.",
+        "Cost of funds is fixed at 10% on the deployed capital amount.",
+        "The 4,200,000 INR acquisition budget and 1,800,000 INR setup cost are fully utilized and non-variable with loan count.",
+        "Credit loss figures provided are annualized expectations for the pilot duration."
+      ],
+      "confidence": 0.98
+    },
+    {
+      "agent": "credit_risk",
+      "backs": "G1",
+      "claim": "Strategy G1 represents the optimal risk-adjusted selection by minimizing expected credit loss to 10,314,000 INR while maintaining compliance with all default and concentration limits.",
+      "rationale": "Candidate G1 is the most prudent strategy from a credit perspective, as it yields the lowest credit_loss (10,314,000 INR) among all feasible options. It strategically allocates capital to the segments with the lowest default risk—service SMEs (sme_default 0.035) and small manufacturers (mfg_default 0.045)—while excluding the highest-risk retail segment (retail_default 0.05). This configuration ensures the portfolio default rate remains well below the default_limit of 0.05. Furthermore, the allocation to SMEs stays within the concentration_limit of 0.7 of deployed capital, and the deployment of 270,000,000 INR respects the liquidity_reserve requirement.",
+      "lever_view": {
+        "n_retail": 0.0,
+        "n_sme": 306.0,
+        "n_mfg": 96.0
+      },
+      "signals": {
+        "sme_default_risk": 0.035,
+        "mfg_default_risk": 0.045,
+        "retail_default_risk": 0.05,
+        "default_cap": 0.05,
+        "concentration_cap": 0.7
+      },
+      "assumptions": [
+        "Expected default fractions per segment are stable and predictive for the one-year pilot duration.",
+        "Concentration limits apply to the deployed capital rather than total capital.",
+        "No external macroeconomic shocks disproportionately impact the service SME or manufacturing sectors during the pilot."
+      ],
+      "confidence": 0.95
+    },
+    {
+      "agent": "marketing",
+      "backs": "G3",
+      "claim": "Target the Retail and SME segments to maximize customer acquisition volume and market penetration within the pilot budget.",
+      "rationale": "Candidate G3 delivers the highest total customer volume (506 loans) among all feasible strategies, which is critical for establishing brand presence during a pilot. By focusing on the Retail segment—which offers the largest available retail_demand of 1500.0 and the most efficient retail_acq cost of 2000.0 INR—and the SME segment (sme_demand of 900.0), we optimize the acquisition budget. The total spend for G3 is well within the acq_budget of 4200000.0 INR, providing a scalable foundation for future growth while capturing significant interest_income of 51,300,000 INR.",
+      "lever_view": {
+        "retail_customer_target": 183.0,
+        "sme_customer_target": 313.0,
+        "mfg_customer_target": 10.0
+      },
+      "signals": {
+        "customer_impact": 0.95,
+        "growth_potential": 0.92
+      },
+      "assumptions": [
+        "High initial customer volume accelerates word-of-mouth marketing and lowers future acquisition costs",
+        "The 1.5% servicing fee per year does not negatively impact customer satisfaction or retention",
+        "Current demand levels for Retail and SME segments will remain stable throughout the pilot duration"
+      ],
+      "confidence": 0.9
+    },
+    {
+      "agent": "compliance",
+      "backs": "G1",
+      "claim": "Adopt strategy G1 to ensure optimal borrower affordability and minimize regulatory risk through the lowest projected credit loss.",
+      "rationale": "Strategy G1 is selected as it represents the most responsible lending approach among feasible candidates, yielding the lowest total credit loss of 10,314,000. From a customer protection perspective, prioritizing the lower-default Service SME (3.5%) and Small Manufacturer (4.5%) segments reduces the risk of over-indebtedness and business failure. The strategy strictly adheres to the 19% rate_limit and maintains a portfolio default rate well below the 0.05 ceiling, minimizing potential conduct risk and regulatory scrutiny.",
+      "lever_view": {
+        "rate_limit": 0.19,
+        "default_limit": 0.05
+      },
+      "signals": {
+        "compliance_health": 1.0,
+        "affordability_index": 0.96,
+        "default_risk_safety_margin": 0.236
+      },
+      "assumptions": [
+        "Observed default rates for Service SMEs and Small Manufacturers remain stable throughout the pilot period.",
+        "A 19% annual interest rate meets local fair-pricing standards for the digital lending sector in India.",
+        "The exclusion of the retail segment in G1 is based purely on risk-adjusted performance and does not violate any sector-specific inclusive lending mandates."
+      ],
+      "confidence": 0.95
+    }
+  ],
+  "objections": [
+    {
+      "from_agent": "credit_risk",
+      "against": "S_retail",
+      "severity": "blocking",
+      "claim": "S_retail violates concentration: No segment may receive more than 70% of deployed capital",
+      "evidence": "over the limit by 0.30",
+      "cites_constraint": "concentration",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "finance",
+      "against": "S_retail",
+      "severity": "blocking",
+      "claim": "S_retail violates liquidity: At least INR 3 crore must remain undeployed as a liquidity reserve",
+      "evidence": "over the limit by 10,000,000.00",
+      "cites_constraint": "liquidity",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "credit_risk",
+      "against": "S_greedy",
+      "severity": "blocking",
+      "claim": "S_greedy violates concentration: No segment may receive more than 70% of deployed capital",
+      "evidence": "over the limit by 0.03",
+      "cites_constraint": "concentration",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "finance",
+      "against": "S_greedy",
+      "severity": "blocking",
+      "claim": "S_greedy violates liquidity: At least INR 3 crore must remain undeployed as a liquidity reserve",
+      "evidence": "over the limit by 285,000,000.00",
+      "cites_constraint": "liquidity",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "research",
+      "against": "G1",
+      "severity": "minor",
+      "claim": "Strategy G1 is volume-feasible but entirely excludes the largest market segment.",
+      "evidence": "G1 allocates n_retail=0 loans, which is within the retail_demand of 1500.0 loans, while its total allocation of n_retail=0, n_sme=306, and n_mfg=96 is below the max_loans of 700.0.",
+      "cites_constraint": "",
+      "response": "I would only object if a strategy proposed volumes exceeding the max_loans of 700.0 or segment demand (retail_demand=1500.0, sme_demand=900.0, mfg_demand=450.0).",
+      "outcome": "unresolved"
+    },
+    {
+      "from_agent": "finance",
+      "against": "S_retail",
+      "severity": "blocking",
+      "claim": "Strategy S_retail fails to maintain the required liquidity reserve of INR 3 crore.",
+      "evidence": "Total deployed capital in S_retail is 280,000,000 INR, which, when subtracted from the 300,000,000 INR total capital, leaves only 20,000,000 INR, violating the liquidity requirement.",
+      "cites_constraint": "liquidity",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "finance",
+      "against": "S_greedy",
+      "severity": "blocking",
+      "claim": "Strategy S_greedy exceeds available capital and violates the liquidity reserve mandate.",
+      "evidence": "Strategy S_greedy requires 555,000,000 INR in deployed capital, far exceeding the total available capital of 300,000,000 INR.",
+      "cites_constraint": "liquidity",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "credit_risk",
+      "against": "S_retail",
+      "severity": "blocking",
+      "claim": "Strategy S_retail violates the mandatory concentration limit.",
+      "evidence": "Concentration limit states no segment may receive more than 70% of deployed capital; S_retail deploys 100% of capital to the retail segment.",
+      "cites_constraint": "concentration",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "credit_risk",
+      "against": "S_greedy",
+      "severity": "blocking",
+      "claim": "Strategy S_greedy violates the mandatory concentration limit.",
+      "evidence": "Concentration limit states no segment may receive more than 70% of deployed capital; S_greedy allocates 450 units of mfg_loan out of 700 total, which exceeds 70% of deployed capital.",
+      "cites_constraint": "concentration",
+      "response": "",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "credit_risk",
+      "against": "S_balanced",
+      "severity": "minor",
+      "claim": "Portfolio credit risk is higher compared to the optimized selection.",
+      "evidence": "S_balanced results in a credit loss of 11,250,000 INR, which is higher than the 10,314,000 INR projected for G1.",
+      "cites_constraint": "",
+      "response": "I would object if the portfolio default rate exceeded the 0.05 limit, which this strategy currently avoids.",
+      "outcome": "unresolved"
+    },
+    {
+      "from_agent": "marketing",
+      "against": "G1",
+      "severity": "material",
+      "claim": "G1 neglects high-growth potential of the retail segment, limiting brand visibility and market penetration.",
+      "evidence": "G1 allocates zero loans to the retail segment (n_retail=0), which is the most cost-effective segment to acquire at 2,000 INR/customer, hindering our ability to build a broad customer base.",
+      "cites_constraint": "",
+      "response": "Adjust the segment mix to include at least 150 retail units to balance long-term market presence with risk-adjusted returns.",
+      "outcome": "defended"
+    },
+    {
+      "from_agent": "compliance",
+      "against": "G3",
+      "severity": "minor",
+      "claim": "Higher retail exposure increases potential for conduct risk and collection complexity.",
+      "evidence": "Strategy G3 includes 183 retail loans, which is significantly higher than G1's 0 retail loans, increasing the volume of interactions with the most vulnerable segment.",
+      "cites_constraint": "Fair customer treatment",
+      "response": "While G3 is feasible, I caution that the increased reliance on the retail segment compared to G1 necessitates more stringent oversight of collection practices to maintain our conduct risk mandate.",
+      "outcome": "defended"
+    }
+  ],
+  "decision": {
+    "statement": "FinNova Capital will adopt Strategy G1, focusing the lending pilot exclusively on Service SMEs and Small Manufacturers to optimize risk-adjusted returns while maintaining a 3 crore INR liquidity reserve.",
+    "chosen": "G1",
+    "sections": {
+      "customer_segment": "The pilot focuses on Service SMEs and Small Manufacturers, intentionally excluding the high-volume retail segment to minimize credit risk and operational overhead during the initial phase.",
+      "product_terms": "Loan pricing is set to cover the 10% cost of funds and 1.5% servicing fee, providing competitive rates to established businesses with proven credit histories.",
+      "approval_policy": "Strict adherence to a credit scoring model that prioritizes business longevity and cash flow stability, ensuring expected credit loss is kept below 10.4 million INR.",
+      "budget_allocation": "INR 18 lakh is allocated for product setup, with the remaining INR 42 lakh dedicated to targeted B2B marketing and channel partnerships for the selected segments.",
+      "risk_limits": "No single segment will exceed 70% of the deployed capital, and a mandatory liquidity buffer of at least INR 3 crore will be maintained at all times.",
+      "go_to_market": "Launch will leverage industrial associations for manufacturer outreach and digital professional platforms for service SME engagement.",
+      "implementation_sequence": "Phase 1: Credit model and platform setup; Phase 2: Direct marketing and lead generation; Phase 3: Rolling loan disbursement with monthly performance audits.",
+      "measurable_outcomes": "Successful deployment of up to 700 loans within capital constraints, achieving the target net profitability and keeping default rates within the 3.5% threshold."
+    },
+    "evidence": [
+      "finance: Strategy G1 maximizes net profitability and maintains the mandatory INR 30M liquidity reserve.",
+      "credit_risk: G1 represents the optimal risk-adjusted selection with the lowest projected credit loss (10.3M INR).",
+      "compliance: G1 ensures optimal borrower affordability and minimizes regulatory/conduct risk.",
+      "research: Focus on Manufacturing and Service SMEs provides the most stable foundation for the pilot."
+    ],
+    "rejected": [
+      {
+        "strategy": "S_retail",
+        "reason": "Violated mandatory concentration limits (no segment > 70%) and failed to maintain the required INR 3 crore liquidity reserve."
+      },
+      {
+        "strategy": "S_greedy",
+        "reason": "Exceeded total available capital and violated liquidity and concentration guardrails."
+      }
+    ],
+    "tradeoffs": [
+      "Lower market penetration and brand visibility by excluding the high-volume retail sector.",
+      "Concentration of risk in B2B sectors versus a broader, diversified consumer-facing book."
+    ],
+    "risks": [
+      "Sector-specific economic downturns affecting manufacturing or service sectors disproportionately.",
+      "Potential for lower-than-expected demand in the specific chosen niches during the one-year pilot."
+    ],
+    "assumptions": [
+      "The 10% cost of funds remains stable over the 12-month period.",
+      "Operational capacity is sufficient to handle 700 high-touch SME loans."
+    ],
+    "implementation": [
+      {
+        "window": "Month 1-2",
+        "action": "Product setup, credit scoring engine finalization, and recruitment of SME lending specialists.",
+        "owner": "Operations and Credit Risk"
+      },
+      {
+        "window": "Month 3",
+        "action": "Marketing launch and initial loan applications processing for Manufacturing and Service segments.",
+        "owner": "Marketing and Sales"
+      },
+      {
+        "window": "Months 4-12",
+        "action": "Ongoing portfolio monitoring, servicing, and monthly liquidity/risk reviews.",
+        "owner": "Finance and Credit Risk"
+      }
+    ],
+    "kpis": [
+      {
+        "name": "Expected Credit Loss (ECL)",
+        "formula": "Total Projected Defaults / Total Portfolio Value",
+        "baseline": 0.05,
+        "target": 0.035,
+        "unit": "Percentage"
+      },
+      {
+        "name": "Liquidity Reserve",
+        "formula": "Total Capital - Deployed Principal",
+        "baseline": 30000000.0,
+        "target": 35000000.0,
+        "unit": "INR"
+      },
+      {
+        "name": "Portfolio Yield",
+        "formula": "(Interest Income - Cost of Funds - Servicing Fees) / Total Principal",
+        "baseline": 0.04,
+        "target": 0.065,
+        "unit": "Percentage"
+      }
+    ],
+    "overrode_score": false,
+    "override_reason": "",
+    "confidence": 0.95
+  },
+  "trace": [
+    {
+      "ts": 1788269169.0775337,
+      "stage": "0",
+      "agent": "system",
+      "kind": "run_started",
+      "payload": {
+        "mode": "gemini",
+        "roster": [
+          "research",
+          "finance",
+          "credit_risk",
+          "marketing",
+          "compliance"
+        ]
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "G1",
+        "origin": "search",
+        "objective": 6537000.0,
+        "feasible": true,
+        "violations": []
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "G2",
+        "origin": "search",
+        "objective": 6465000.0,
+        "feasible": true,
+        "violations": []
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "G3",
+        "origin": "search",
+        "objective": 6295500.0,
+        "feasible": true,
+        "violations": []
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "G4",
+        "origin": "search",
+        "objective": 6157000.0,
+        "feasible": true,
+        "violations": []
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "G5",
+        "origin": "search",
+        "objective": 5745500.0,
+        "feasible": true,
+        "violations": []
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "S_retail",
+        "origin": "seed",
+        "objective": 3800000.0,
+        "feasible": false,
+        "violations": [
+          "concentration",
+          "liquidity"
+        ]
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "S_greedy",
+        "origin": "seed",
+        "objective": 13000000.0,
+        "feasible": false,
+        "violations": [
+          "concentration",
+          "liquidity"
+        ]
+      }
+    },
+    {
+      "ts": 1788269170.972785,
+      "stage": "0",
+      "agent": "search",
+      "kind": "candidate",
+      "payload": {
+        "id": "S_balanced",
+        "origin": "seed",
+        "objective": 5650000.0,
+        "feasible": true,
+        "violations": []
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "1",
+      "agent": "research",
+      "kind": "recommendation",
+      "payload": {
+        "backs": "G1",
+        "claim": "Focus the lending pilot exclusively on the Service SME and Small Manufacturer segments to maximize risk-adjusted returns within capital constraints.",
+        "signals": {
+          "sme_demand_utilization": 0.34,
+          "mfg_demand_utilization": 0.21,
+          "retail_demand_utilization": 0.0,
+          "total_loan_cap_utilization": 0.57
+        },
+        "confidence": 0.9
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "1",
+      "agent": "finance",
+      "kind": "recommendation",
+      "payload": {
+        "backs": "G1",
+        "claim": "Prioritize Strategy G1 to maximize net profitability while strictly adhering to the INR 30,000,000 liquidity reserve requirement.",
+        "signals": {
+          "margin_health": 0.96,
+          "liquidity_health": 1.0,
+          "capital_efficiency": 0.9
+        },
+        "confidence": 0.98
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "1",
+      "agent": "credit_risk",
+      "kind": "recommendation",
+      "payload": {
+        "backs": "G1",
+        "claim": "Strategy G1 represents the optimal risk-adjusted selection by minimizing expected credit loss to 10,314,000 INR while maintaining compliance with all default and concentration limits.",
+        "signals": {
+          "sme_default_risk": 0.035,
+          "mfg_default_risk": 0.045,
+          "retail_default_risk": 0.05,
+          "default_cap": 0.05,
+          "concentration_cap": 0.7
+        },
+        "confidence": 0.95
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "1",
+      "agent": "marketing",
+      "kind": "recommendation",
+      "payload": {
+        "backs": "G3",
+        "claim": "Target the Retail and SME segments to maximize customer acquisition volume and market penetration within the pilot budget.",
+        "signals": {
+          "customer_impact": 0.95,
+          "growth_potential": 0.92
+        },
+        "confidence": 0.9
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "1",
+      "agent": "compliance",
+      "kind": "recommendation",
+      "payload": {
+        "backs": "G1",
+        "claim": "Adopt strategy G1 to ensure optimal borrower affordability and minimize regulatory risk through the lowest projected credit loss.",
+        "signals": {
+          "compliance_health": 1.0,
+          "affordability_index": 0.96,
+          "default_risk_safety_margin": 0.236
+        },
+        "confidence": 0.95
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "2",
+      "agent": "system",
+      "kind": "share",
+      "payload": {
+        "digest": "research backs [G1] (conf 0.90): Focus the lending pilot exclusively on the Service SME and Small Manufacturer segments to maximize risk-adjusted returns within capital constraints.\nfinance backs [G1] (conf 0.98): Prioritize Strategy G1 to maximize net profitability while strictly adhering to the INR 30,000,000 liquidity reserve requirement.\ncredit_risk backs [G1] (conf 0.95): Strategy G1 represents the optimal risk-adjusted selection by minimizing expected credit loss to 10,314,000 INR while maintaining compliance with all default and concentration limits.\nmarketing backs [G3] (conf 0.90): Target the Retail and SME segments to maximize customer acquisition volume and market penetration within the pilot budget.\ncompliance backs [G1] (conf 0.95): Adopt strategy G1 to ensure optimal borrower affordability and minimize regulatory risk through the lowest projected credit loss.",
+        "recommendations": 5
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "3",
+      "agent": "credit_risk",
+      "kind": "auto_objection",
+      "payload": {
+        "against": "S_retail",
+        "cites": "concentration"
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "3",
+      "agent": "finance",
+      "kind": "auto_objection",
+      "payload": {
+        "against": "S_retail",
+        "cites": "liquidity"
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "3",
+      "agent": "credit_risk",
+      "kind": "auto_objection",
+      "payload": {
+        "against": "S_greedy",
+        "cites": "concentration"
+      }
+    },
+    {
+      "ts": 1788269214.879117,
+      "stage": "3",
+      "agent": "finance",
+      "kind": "auto_objection",
+      "payload": {
+        "against": "S_greedy",
+        "cites": "liquidity"
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "research",
+      "kind": "objection",
+      "payload": {
+        "against": "G1",
+        "severity": "minor",
+        "cites": ""
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "finance",
+      "kind": "objection",
+      "payload": {
+        "against": "S_retail",
+        "severity": "blocking",
+        "cites": "liquidity"
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "finance",
+      "kind": "objection",
+      "payload": {
+        "against": "S_greedy",
+        "severity": "blocking",
+        "cites": "liquidity"
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "credit_risk",
+      "kind": "objection",
+      "payload": {
+        "against": "S_retail",
+        "severity": "blocking",
+        "cites": "concentration"
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "credit_risk",
+      "kind": "objection",
+      "payload": {
+        "against": "S_greedy",
+        "severity": "blocking",
+        "cites": "concentration"
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "credit_risk",
+      "kind": "objection",
+      "payload": {
+        "against": "S_balanced",
+        "severity": "minor",
+        "cites": ""
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "marketing",
+      "kind": "objection",
+      "payload": {
+        "against": "G1",
+        "severity": "material",
+        "cites": ""
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "compliance",
+      "kind": "objection",
+      "payload": {
+        "against": "G3",
+        "severity": "minor",
+        "cites": "Fair customer treatment"
+      }
+    },
+    {
+      "ts": 1788269259.7717357,
+      "stage": "3",
+      "agent": "system",
+      "kind": "challenge_done",
+      "payload": {
+        "rounds": 1,
+        "objections": 12
+      }
+    },
+    {
+      "ts": 1788269259.7727292,
+      "stage": "4",
+      "agent": "system",
+      "kind": "ranking",
+      "payload": {
+        "order": [
+          {
+            "id": "G1",
+            "score": 0.9425,
+            "feasible": true
+          },
+          {
+            "id": "G2",
+            "score": 0.8893,
+            "feasible": true
+          },
+          {
+            "id": "G3",
+            "score": 0.7743,
+            "feasible": true
+          },
+          {
+            "id": "G4",
+            "score": 0.7082,
+            "feasible": true
+          },
+          {
+            "id": "G5",
+            "score": 0.4488,
+            "feasible": true
+          },
+          {
+            "id": "S_balanced",
+            "score": 0.3925,
+            "feasible": true
+          },
+          {
+            "id": "S_greedy",
+            "score": 0.0,
+            "feasible": false
+          },
+          {
+            "id": "S_retail",
+            "score": 0.0,
+            "feasible": false
+          }
+        ]
+      }
+    },
+    {
+      "ts": 1788269302.6840205,
+      "stage": "5",
+      "agent": "ceo",
+      "kind": "decided",
+      "payload": {
+        "chosen": "G1",
+        "confidence": 0.95,
+        "overrode": false,
+        "degraded": []
+      }
+    },
+    {
+      "ts": 1788269302.6840205,
+      "stage": "5",
+      "agent": "system",
+      "kind": "run_done",
+      "payload": {}
+    }
+  ],
+  "round": 1,
+  "degraded": [],
+  "parent_run": null,
+  "reran": [],
+  "unchanged": [],
+  "invalidated_assumptions": []
+}
