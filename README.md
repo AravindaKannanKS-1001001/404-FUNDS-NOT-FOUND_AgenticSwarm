@@ -1,5 +1,7 @@
 # The AI Boardroom — Agentic Swarm submission
 
+**Team: 404 : FUNDS NOT FOUND**
+
 **Track: Theme A — FINSWARM** (FinNova Capital, digital small-business lending)
 
 > Most teams build a swarm for *their* problem. We built a **board that convenes on any
