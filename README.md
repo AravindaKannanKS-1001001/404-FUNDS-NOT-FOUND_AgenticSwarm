@@ -1,6 +1,6 @@
 # The AI Boardroom — Agentic Swarm submission
 
-**Team: 404 : FUNDS NOT FOUND**
+**Team: 404 : FUNDS NOT FOUND** — Aravinda Kannan KS (lead, 24BCE1290) · Tarun Krishna Manivannan (24BCE5460) · Krishna Prasad M (24BCE5519) · Eluke. Srinitha (24BCE1639)
 
 **Track: Theme A — FINSWARM** (FinNova Capital, digital small-business lending)
 
