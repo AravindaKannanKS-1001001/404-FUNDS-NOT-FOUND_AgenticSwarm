@@ -128,17 +128,130 @@ Full technical detail: [`submission/REPORT.md`](submission/REPORT.md)
 
 ---
 
-## Layout
+## Repository map
+
+Every file, and why it exists.
 
 ```
-boardroom/     the engine (13 modules, ~1,480 lines of production code)
-prompts/       4 templates — department, CEO, challenge, intake
-cases/         themeA_tc1.json (FINSWARM), themeC_tc1.json (CHIPSWARM)
-briefs/        raw test-case text + surprise deltas
-evidence/      recorded live runs, replayable offline
-submission/    test-case transcripts + technical report
-docs/          design docs written before the build
+404-FUNDS-NOT-FOUND_AgenticSwarm/
+│
+├── README.md                     this file
+├── requirements.txt              pinned deps (pydantic, streamlit, google-generativeai)
+├── .gitignore                    excludes .venv/, runs/, .env — no secrets are committed
+│
+├── boardroom/                    THE ENGINE — 15 modules, ~1,480 lines of production code.
+│   │                             Nothing here is domain-specific.
+│   │
+│   ├── state.py                  The shared contract. Pydantic models for Variable, Strategy,
+│   │                             Violation, Recommendation, Objection, Decision, KPI, and
+│   │                             BoardroomState. Owns the append-only trace. A dumped
+│   │                             BoardroomState IS the audit record.
+│   │
+│   ├── calculator.py             The arithmetic sandbox. `safe_eval` whitelists AST node types
+│   │                             and never eval()s raw text — no attribute access, no imports,
+│   │                             no __builtins__, unknown names rejected before compile.
+│   │                             `compute()` resolves chained metrics; `check()` returns the
+│   │                             VIOLATED constraints with a margin. Every number in the whole
+│   │                             system originates here.
+│   │
+│   ├── generate.py               Candidate search. 8k bounded random lever samples, filtered by
+│   │                             the hard constraints, then compass + stochastic refinement to
+│   │                             reach the constrained vertex. Seed corner strategies are always
+│   │                             included EVEN WHEN INFEASIBLE, so the rejected alternative is a
+│   │                             real one with a named breach. No solver dependency.
+│   │
+│   ├── scoring.py                Weighted score over five fixed roles (value / efficiency /
+│   │                             feasibility / customer / risk), min-max normalised across the
+│   │                             feasible cohort. Anything with a violation scores 0.
+│   │
+│   ├── llm.py                    Provider access + the 5-rung fallback ladder that never raises:
+│   │                             primary → retry → secondary model → last-good cache → stub.
+│   │                             Adapters for Gemini / Anthropic / OpenAI, lazy-imported.
+│   │                             Loads .env, auto-detects the provider, and ships an offline
+│   │                             stub so the whole system runs with no API key.
+│   │
+│   ├── agents.py                 Roster-driven prompt rendering. `facts_for()` filters variables
+│   │                             by `visible_to` — this is what makes specialisation structural.
+│   │                             One function drives every department; there is no per-agent code.
+│   │
+│   ├── engine.py                 The 5-stage protocol (generate → analyse → share → challenge →
+│   │                             compare → decide), capped at 3 debate rounds. Auto-generates a
+│   │                             blocking objection from a violated constraint's owner. Holds
+│   │                             `validate()` (the theme's 8 mandated sections, enforced in code)
+│   │                             and `adapt()` (surprise handling, both modes).
+│   │
+│   ├── intake.py                 Brief → case pack, plus `validate_pack()` — the deterministic
+│   │                             checker that proves a pack computes before the board sees it.
+│   │                             Extraction, not invention: absent values are tagged as
+│   │                             assumptions, never silently filled.
+│   │
+│   ├── oracles.py                Hand-computed optima the search is checked against. Catches a
+│   │                             wrong case pack, not just wrong code.
+│   │
+│   ├── cli.py                    run | surprise | replay | intake, plus `--fail <agent>` and
+│   │                             the plain-text board renderer.
+│   ├── __main__.py               makes `python -m boardroom ...` work
+│   ├── viewer.py                 Streamlit lens over runs/*.json. Read-only, with a weights
+│   │                             slider that re-scores without any LLM call. Expendable.
+│   │
+│   ├── selfcheck.py              Runs all 10 module self-checks + an end-to-end
+│   │                             baseline→surprise→replay pass. Fully offline.
+│   └── drill.py                  Runs every case pack in cases/ through the full board and
+│                                 verifies each against its oracle.
+│
+├── prompts/                      Four templates. Role text comes from the pack, not from here.
+│   ├── _department.md            Mandate + visible variables + owned constraints + guardrails
+│   ├── _challenge.md             Appended in the challenge round; requires an objections array
+│   │                             while explicitly forbidding a fabricated disagreement
+│   ├── _ceo.md                   Ranked strategies, all objections, the theme's required sections
+│   └── _intake.md                Brief → case-pack schema, with the extract-don't-invent rule
+│
+├── cases/                        THE DOMAIN LIVES HERE. Roster, variables, formulas, constraints,
+│   │                             guardrails and required decision sections — all as data.
+│   ├── themeA_tc1.json           FINSWARM: 6 agents, 22 variables, 4 levers, 9 hard constraints
+│   └── themeC_tc1.json           CHIPSWARM: 7 agents, 3 levers, 8 constraints — proof the engine
+│                                 is domain-agnostic. Runs with ZERO code changes.
+│
+├── briefs/
+│   ├── themeA_tc1.txt            The organisers' TC1 text, verbatim (input to `intake`)
+│   └── themeA_tc2.facts.json     The TC2 shock as a variable delta. Because constraint limits are
+│                                 pack variables, tightening the 5% cap to 5.5% is one line here.
+│
+├── evidence/                     RECORDED LIVE RUNS — replay these with no network and no API key
+│   ├── baseline_TC1.json         Full TC1 board: 6 agents, objections, ranking, CEO decision
+│   └── surprise_TC2.json         Full TC2 surprise: selective re-run, 0 feasible portfolios
+│
+├── submission/                   THE DELIVERABLES
+│   ├── AgenticSwarm_Deck.pptx    13 slides: team → track → architecture → TC1 → TC2 → stack
+│   ├── AgenticSwarm_Deck.pdf     same deck, PDF
+│   ├── TC1_baseline.md           TC1 agent responses, verbatim from the live run
+│   ├── TC2_surprise.md           TC2 agent responses, verbatim from the live run
+│   ├── REPORT.md                 tech stack + how the agents were built + disclosures
+│   ├── deck_prompt.txt           the 12-slide plan given to the deck generator
+│   └── add_team_slide.py         builds the team slide natively and prepends it
+│
+└── docs/                         Design docs written BEFORE the build, kept for provenance
+    ├── THEMES.md                 The 15 published test cases, theme choice rationale, and the
+    │                             hand-worked TC1 optima (including a correction to an earlier
+    │                             wrong figure — the reasoning is left visible on purpose)
+    ├── ARCHITECTURE.md           Case-pack schema, sandbox, search, protocol, surprise modes
+    ├── STRATEGY.md               Positioning, the four bets, rubric mapping, deliberate cuts
+    ├── PHASES.md                 Build plan with gates and abort rules
+    ├── HANDOVER.md               12-step build order, each with an acceptance check
+    └── PITCH.md                  8-minute demo script and judge Q&A prep
 ```
+
+### Where to look first
+
+| If you want to… | Open |
+|---|---|
+| See what the agents actually said | `submission/TC1_baseline.md`, `submission/TC2_surprise.md` |
+| Check a number is real, not hallucinated | `cases/themeA_tc1.json` → `metrics` / `constraints`, then `boardroom/calculator.py` |
+| Verify agents can't see each other's data | `visible_to` in `cases/themeA_tc1.json`, then `facts_for()` in `boardroom/agents.py` |
+| Read an agent's actual instruction | `prompts/_department.md` + the `roster` block in the case pack |
+| Confirm it's domain-agnostic | `cases/themeC_tc1.json` — different theme, different roster, same code |
+| Run it yourself with no API key | `python -m boardroom.selfcheck` |
+| Replay a real run offline | `python -m boardroom replay evidence/surprise_TC2.json` |
 
 ## Disclosures
 
